@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'includes/_messages.html' %}
+<div class="container mt-4">
+  <h4>Add Income</h4>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <input type="number" class="form-control" name="amount" required>
+    </div>
+    <div class="mb-3">
+      <label for="source" class="form-label">Source</label>
+      <select class="form-select" name="name" required>
+        {% for s in sources %}
+        <option value="{{ s.id }}">{{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="date" class="form-label">Date</label>
+      <input type="date" class="form-control" name="date">
+    </div>
+    <button type="submit" class="btn btn-success">Add Income</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="position-relative">
+    <h4 class="login-title text-center">Register User</h4>
+    <div class="login-container shadow">
+         {% include 'includes/_messages.html' %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Email Id</label>
+                <input type="text" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="fullname" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+            <div class="text-center mt-3">
+              <small>Have an account? <a href="{% url 'login_user' %}">Login here</a></small>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

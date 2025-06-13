@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h4>Your Sources</h4>
+<a href="{% url 'add_source' %}" class="btn btn-primary mb-2">Add Source</a>
+<ul class="list-group">
+  {% for source in sources %}
+    <li class="list-group-item d-flex justify-content-between">
+      {{ source.name }}
+      <span>
+        <a href="{% url 'edit_source' source.id %}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{% url 'delete_source' source.id %}" class="btn btn-sm btn-danger">Delete</a>
+      </span>
+    </li>   
+  {% endfor %}
+</ul>
+
+{% endblock content %}

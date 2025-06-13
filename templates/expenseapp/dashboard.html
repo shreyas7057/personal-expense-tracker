@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="mb-4">Dashboard</h3>
+{% include 'includes/_messages.html' %}
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Total Income</h5>
+                    <p class="card-text">&#8377; {{ total_income }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-danger">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-danger">Total Expenses</h5>
+                    <p class="card-text">&#8377; {{ total_expense }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Balance</h5>
+                    {% if balance <= 0 %} 
+                        <p class="card-text" style="color: #FF0616;">&#8377; {{ balance }}</p>
+                    {% else %}
+                    <p class="card-text">&#8377; {{ balance }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="{% url 'add_income' %}" class="btn btn-success">+ Add Income</a>
+    <a href="{% url 'add_expense' %}" class="btn btn-danger">+ Add Expense</a>
+
+    <hr>
+
+    <h5>Recent Transactions</h5>
+    <div class="row">
+        <div class="col-md-6">
+            <h6>Incomes</h6>
+            <ul class="list-group">
+                {% for income in incomes %}
+                <li class="list-group-item">{{ income.date }} - {{ income.source }}: ₹{{ income.amount }}</li>
+                {% empty %}
+                <li class="list-group-item">No income records yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h6>Expenses</h6>
+            <ul class="list-group">
+                {% for expense in expenses %}
+                <li class="list-group-item">{{ expense.date }} - {{ expense.category }}: ₹{{ expense.amount }}</li>
+                {% empty %}
+                <li class="list-group-item">No expenses yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

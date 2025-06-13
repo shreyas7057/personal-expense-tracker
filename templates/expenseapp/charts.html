@@ -1,0 +1,80 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Income & Expense Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    canvas {
+      max-width: 400px;
+      max-height: 300px;
+    }
+  </style>
+</head>
+<body class="container mt-4">
+
+  <h4>Income by Source</h4>
+  <div class="d-flex justify-content-center">
+    <canvas id="incomeChart"></canvas>
+  </div>
+
+  <h4 class="mt-5">Expense by Category</h4>
+  <div class="d-flex justify-content-center">
+    <canvas id="expenseChart"></canvas>
+  </div>
+
+  <script>
+    fetch("{% url 'chart_data' %}")
+    .then(res => res.json())
+    .then(data => {
+      const incomeLabels = data.income.map(i => i.source__name);
+      const incomeValues = data.income.map(i => i.total);
+
+      const expenseLabels = data.expense.map(e => e.category);
+      const expenseValues = data.expense.map(e => e.total);
+
+      new Chart(document.getElementById("incomeChart"), {
+        type: 'pie',
+        data: {
+          labels: incomeLabels,
+          datasets: [{
+            label: "Income",
+            data: incomeValues,
+            backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6610f2']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+
+      new Chart(document.getElementById("expenseChart"), {
+        type: 'bar',
+        data: {
+          labels: expenseLabels,
+          datasets: [{
+            label: "Expense",
+            data: expenseValues,
+            backgroundColor: '#dc3545'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+{% endblock content %}
