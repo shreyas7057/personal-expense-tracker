@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import add_expense,add_income,dashboard,add_source,list_sources,edit_source,delete_source,home,expense_report,income_expense_charts,chart_page
+from .views import add_expense,add_income,dashboard,add_source,list_sources,edit_source,delete_source,home,expense_report,income_expense_charts,chart_page,generate_expense_pdf
 
 urlpatterns = [
 
@@ -18,6 +18,9 @@ urlpatterns = [
 
     path('charts/data/', income_expense_charts, name='chart_data'),
     path('charts/', chart_page, name='chart_page'),
+
+    path('expense-report/pdf/', generate_expense_pdf, name='generate_expense_pdf'),
+
 
 
 ]

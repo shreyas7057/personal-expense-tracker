@@ -7,6 +7,12 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.db.models import Sum
 from django.utils.dateparse import parse_date
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.http import HttpResponse
+from .models import Expense
+from django.db.models import Sum
+import datetime
 
 def home(request):
     user = request.user
@@ -167,3 +173,27 @@ def income_expense_charts(request):
 @login_required
 def chart_page(request):
     return render(request, 'expenseapp/charts.html')
+
+
+@login_required
+def generate_expense_pdf(request):
+    expenses = Expense.objects.filter(user=request.user).order_by('-date')
+    total = expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    template = get_template("expenseapp/expense_pdf_template.html")
+    html = template.render({
+        'expenses': expenses,
+        'total': total,
+        'user': request.user,
+        'date': datetime.datetime.now(),
+    })
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="expense_report.pdf"'
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse("Error generating PDF", status=500)
+
+    return response
